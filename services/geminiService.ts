@@ -1,7 +1,9 @@
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { AnalysisResult, StockAnalysisInput, GroundingSource, ConsistencyResult } from "../types";
 
-// Initialize Gemini Client
+// Fix: Use process.env.API_KEY directly as per Coding Guidelines.
+// The API key must be obtained exclusively from the environment variable process.env.API_KEY.
+// Assume this variable is pre-configured, valid, and accessible.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const SYSTEM_INSTRUCTION = `
