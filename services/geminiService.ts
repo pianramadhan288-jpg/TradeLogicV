@@ -1,10 +1,34 @@
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { AnalysisResult, StockAnalysisInput, GroundingSource, ConsistencyResult } from "../types";
 
-// Fix: Use process.env.API_KEY directly as per Coding Guidelines.
-// The API key must be obtained exclusively from the environment variable process.env.API_KEY.
-// Assume this variable is pre-configured, valid, and accessible.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// --- ENVIRONMENT VARIABLE HANDLING (VITE FIX) ---
+// Vercel + Vite runs in the browser where 'process' is undefined.
+// Accessing 'process.env' directly causes a crash (Black Screen).
+// We must safely check for it, and fallback to Vite's standard 'import.meta.env'.
+
+const getApiKey = (): string => {
+  try {
+    // 1. Try Vite/Modern Browser Standard (Use VITE_API_KEY in Vercel)
+    // @ts-ignore
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+      // @ts-ignore
+      return import.meta.env.VITE_API_KEY;
+    }
+    // 2. Try Node/Legacy Environment
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    console.warn("Error reading env vars:", e);
+  }
+  return "";
+};
+
+const apiKey = getApiKey();
+
+// Initialize with the retrieved key. 
+// Note: If apiKey is empty, calls will fail, but the app won't crash on white/black screen.
+const ai = new GoogleGenAI({ apiKey: apiKey });
 
 const SYSTEM_INSTRUCTION = `
 System Role: Institutional Portfolio Manager & Senior Forensic Analyst (TradeLogic "The Executioner" v7.0).
