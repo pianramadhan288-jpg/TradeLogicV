@@ -121,6 +121,7 @@ const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onSave }) => {
                                 {localConfig.riskProfile === 'AGGRESSIVE' && <div className="px-2 py-0.5 rounded bg-amber-500 text-black text-[10px] font-bold">ACTIVE</div>}
                             </div>
                             <h4 className={`font-bold mb-1 ${localConfig.riskProfile === 'AGGRESSIVE' ? 'text-amber-400' : 'text-slate-300'}`}>Aggressive (Bull)</h4>
+                            {/* FIX: Changed '>' to '&gt;' below to fix build error */}
                             <p className="text-xs text-slate-500 leading-relaxed">Growth focus. Tolerates high valuations (PBV &gt; 3) if momentum is strong. Higher risk of "Trap" but catches Multibaggers.</p>
                         </button>
                     </div>
